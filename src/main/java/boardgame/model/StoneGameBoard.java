@@ -39,6 +39,22 @@ public class StoneGameBoard implements TwoPhaseMoveState<Position> {
                 && positionsBetweenNotEmpty(from, to);
     }
 
+    private boolean positionsBetweenNotEmpty(Position from, Position to) {
+        int startRow = Math.min(from.row(), to.row());
+        int endRow = Math.max(from.row(), to.row());
+        int startCol = Math.min(from.col(), to.col());
+        int endCol = Math.max(from.col(), to.col());
+
+        for (int row = startRow; row <= endRow; row++) {
+            for (int col = startCol; col <= endCol; col++) {
+                if (isEmpty(new Position(row, col))) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 
 
     private boolean isOnBoard(Position p) {
