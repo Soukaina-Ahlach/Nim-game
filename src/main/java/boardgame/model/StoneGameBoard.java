@@ -35,7 +35,27 @@ public class StoneGameBoard implements TwoPhaseMoveState<Position> {
         return isOnBoard(from) && isOnBoard(to)
                 && !isEmpty(from) && !isEmpty(to)
                 && isAdjacent(from, to)
-                && isValidNumberOfStonesRemoved(to)
+                && isValidNumberOfStonesRemoved(to);
+    }
+
+    private boolean isOnBoard(Position p) {
+        return isOnBoard(p.row(), p.col());
+    }
+
+    private boolean isOnBoard(int row, int col) {
+        return 0 <= row && row < BOARD_SIZE && 0 <= col && col < BOARD_SIZE;
+    }
+
+    private boolean isEmpty(Position p) {
+        return !board[p.row()][p.col()].get();
+    }
+
+    private boolean isValidNumberOfStonesRemoved(Position to) {
+        return board[to.row()][to.col()].get();
+    }
+
+    private boolean isAdjacent(Position from, Position to) {
+        return from.row() == to.row() ||  from.col() == to.col();
     }
 
     @Override
@@ -97,7 +117,7 @@ public class StoneGameBoard implements TwoPhaseMoveState<Position> {
         return player == this.player;
     }
 
-    // Converts the board state to a string representation
+
     @Override
     public String toString() {
 
