@@ -6,11 +6,11 @@
     <artifactId>homework-template-project</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
-    <description><!-- TODO: a brief description of your project --></description>
-    <developers>
+    <description>two-player game played on a 4x4 game board. Each cell on the board contains a piece of stone. Players take turns making moves.
+        During a move, a player selects a non-empty row or column and removes 1, 2, 3, or 4 stones from it. If 2 or more stones are removed, they must be adjacent to each other. The game continues until one player makes the last move, at which point they are declared the winner.</description>    <developers>
         <developer>
-            <name><!-- TODO: your full name --></name>
-            <email><!-- TODO: your email address --></email>
+            <name> Ahlach Soukaina</name>
+            <email>soukaina.ahlach.2001@gmail.com</email>
             <organization>Faculty of Informatics, University of Debrecen</organization>
             <organizationUrl>https://inf.unideb.hu/</organizationUrl>
         </developer>
