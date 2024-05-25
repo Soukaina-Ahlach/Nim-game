@@ -35,8 +35,11 @@ public class StoneGameBoard implements TwoPhaseMoveState<Position> {
         return isOnBoard(from) && isOnBoard(to)
                 && !isEmpty(from) && !isEmpty(to)
                 && isAdjacent(from, to)
-                && isValidNumberOfStonesRemoved(to);
+                && isValidNumberOfStonesRemoved(to)
+                && positionsBetweenNotEmpty(from, to);
     }
+
+
 
     private boolean isOnBoard(Position p) {
         return isOnBoard(p.row(), p.col());
