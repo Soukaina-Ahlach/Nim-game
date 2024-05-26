@@ -1,10 +1,13 @@
 package boardgame.controller;
 
+import boardgame.model.GameResult;
 import boardgame.model.Position;
 import boardgame.model.StoneGameBoard;
+
 import game.State;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
@@ -13,6 +16,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import org.tinylog.Logger;
+import util.JacksonHelper;
+
+import java.io.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoardGameController {
     @FXML
@@ -25,6 +34,9 @@ public class BoardGameController {
     private StoneGameBoard model = new StoneGameBoard();
     private Position fromPosition = null;
     private Position toPosition = null;
+    private int numberOfTurns;
+    private List<GameResult> gameResults = new ArrayList<>();
+
 
     @FXML
     private void initialize() {
@@ -67,6 +79,8 @@ public class BoardGameController {
             if (model.isLegalToMoveFrom(clickedPosition)) {
                 fromPosition = clickedPosition;
                 Logger.info("Selected from position: " + fromPosition);
+            } else {
+                Logger.warn("Attempted to select an illegal from position: " + clickedPosition);
             }
         } else {
             toPosition = clickedPosition;
@@ -78,10 +92,14 @@ public class BoardGameController {
                 fromPosition = null;
                 toPosition = null;
                 updateCurrentTurn();
+                numberOfTurns++;
+
 
                 if (model.isGameOver()) {
                     State.Player winner = model.getNextPlayer().opponent();
                     showAlert("Game Over", "Player " + (winner == State.Player.PLAYER_1 ? player1Name : player2Name) + " wins!");
+                    handleGameOver();
+
                 }
             } else {
                 showAlert("Invalid Move", "The selected move is not valid.");
@@ -104,5 +122,49 @@ public class BoardGameController {
             alert.setContentText(message);
             alert.showAndWait();
         });
+    }
+
+    public BoardGameController() {
+        loadGameResultsFromJson();
+    }
+
+    private void loadGameResultsFromJson() {
+        try (InputStream in = new FileInputStream("game_results.json")) {
+            gameResults = JacksonHelper.readList(in, GameResult.class);
+            Logger.info("Loaded existing game results from game_results.json");
+        } catch (IOException e) {
+            gameResults = new ArrayList<>();
+            Logger.error("Error loading game results from file: " + e.getMessage());
+        }
+    }
+
+    private void handleGameOver() {
+        State.Player winner = model.getNextPlayer().opponent();
+        String winnerName = (winner == State.Player.PLAYER_1) ? player1Name : player2Name;
+        GameResult result = new GameResult(LocalDateTime.now(), player1Name, player2Name, numberOfTurns, winnerName);
+        gameResults.add(result);
+
+        showAlert("Game Over", "Player " + winnerName + " wins!");
+
+        // Serialize game results into JSON and store in a file
+        saveGameResultsToJson();
+    }
+
+    private void saveGameResultsToJson() {
+        try (OutputStream out = new FileOutputStream("game_results.json")) {
+            JacksonHelper.writeList(out, gameResults);
+            Logger.info("Game results saved to game_results.json");
+        } catch (IOException e) {
+            Logger.error("Error saving game results to file: " + e.getMessage());
+        }
+    }
+
+    public void switchSceneToMenu(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    private void handleExit() {
+        Logger.info("Exiting...");
+        Platform.exit();
     }
 }
