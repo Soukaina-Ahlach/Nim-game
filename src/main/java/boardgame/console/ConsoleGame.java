@@ -121,9 +121,16 @@ public class ConsoleGame extends TwoPhaseMoveGame<Position> {
         return new Position(row, col);
     }
 
-
+    /**
+     * Entry point for the application.
+     * <p>
+     * Initializes the game and starts the game loop.
+     *</p>
+     * @param args Command-line arguments (not used in this application)
+     */
     public static void main(String[] args) {
         TwoPhaseMoveState<Position> initialState = new StoneGameBoard();
+        // Define a parser to convert user input into game moves
         Function<String, Position> parser = ConsoleGame::parseMove;
         ConsoleGame game = new ConsoleGame(initialState, parser);
         game.start();
