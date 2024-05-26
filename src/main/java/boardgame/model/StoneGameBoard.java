@@ -1,14 +1,13 @@
 package boardgame.model;
 
-import boardgame.model.GameResult;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import game.TwoPhaseMoveState;
 import game.State;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.function.BiConsumer;
 
 /**
  * Represents the game board for a the game.
@@ -20,7 +19,11 @@ public class StoneGameBoard implements TwoPhaseMoveState<Position> {
     public final BooleanProperty[][] board;
 
     private State.Player player;
+
+    @Getter
     private LocalDateTime startTime;
+
+    @Getter
     private int turnCount;
 
     /**
@@ -52,37 +55,7 @@ public class StoneGameBoard implements TwoPhaseMoveState<Position> {
     public BooleanProperty getCellProperty(int row, int col) {
         return board[row][col];
     }
-    /**
-     * Gets the start time of the game session.
-     *
-     * @return The start time of the game session.
-     */
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
 
-    /**
-     * Gets the number of turns played in the game session.
-     *
-     * @return The number of turns played.
-     */
-    public int getTurnCount() {
-        return turnCount;
-    }
-    /**
-     * Registers a BiConsumer to observe changes to the game board.
-     *
-     * @param observer The BiConsumer to be notified of changes.
-     */
-    public void observeBoard(BiConsumer<Integer, Integer> observer) {
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                final int row = i;
-                final int col = j;
-                board[i][j].addListener((observable, oldValue, newValue) -> observer.accept(row, col));
-            }
-        }
-    }
 
     /**
      * Checks if it is legal to move stones from the specified position.
@@ -107,7 +80,6 @@ public class StoneGameBoard implements TwoPhaseMoveState<Position> {
         return isOnBoard(from) && isOnBoard(to)
                 && !isEmpty(from) && !isEmpty(to)
                 && isAdjacent(from, to)
-                && isValidNumberOfStonesRemoved(to)
                 && positionsBetweenNotEmpty(from, to);
     }
 
@@ -149,9 +121,6 @@ public class StoneGameBoard implements TwoPhaseMoveState<Position> {
         return !board[p.row()][p.col()].get();
     }
 
-    private boolean isValidNumberOfStonesRemoved(Position to) {
-        return board[to.row()][to.col()].get();
-    }
 
     private boolean isAdjacent(Position from, Position to) {
         return from.row() == to.row() ||  from.col() == to.col();
