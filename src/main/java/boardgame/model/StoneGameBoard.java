@@ -1,19 +1,26 @@
 package boardgame.model;
 
+import boardgame.model.GameResult;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import game.TwoPhaseMoveState;
 import game.State;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.function.BiConsumer;
-
 
 public class StoneGameBoard implements TwoPhaseMoveState<Position> {
     public static final int BOARD_SIZE = 4;
     public final BooleanProperty[][] board;
 
     private State.Player player;
+    private LocalDateTime startTime;
+    private int turnCount;
     public StoneGameBoard() {
         board = new BooleanProperty[BOARD_SIZE][BOARD_SIZE];
         // Initially, all cells contain stones
@@ -23,12 +30,22 @@ public class StoneGameBoard implements TwoPhaseMoveState<Position> {
             }
         }
         player = State.Player.PLAYER_1;
-
+        startTime = LocalDateTime.now();
+        turnCount = 0;
     }
+
+
+
     public BooleanProperty getCellProperty(int row, int col) {
         return board[row][col];
     }
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
 
+    public int getTurnCount() {
+        return turnCount;
+    }
     public void observeBoard(BiConsumer<Integer, Integer> observer) {
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
@@ -115,6 +132,7 @@ public class StoneGameBoard implements TwoPhaseMoveState<Position> {
                 board[i][col].set(false);
             }
         }
+        turnCount++;
 
         player = player.opponent();
     }
