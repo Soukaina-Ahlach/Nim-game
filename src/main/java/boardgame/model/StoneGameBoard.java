@@ -6,6 +6,7 @@ import javafx.beans.property.ReadOnlyBooleanWrapper;
 import game.TwoPhaseMoveState;
 import game.State;
 
+import java.util.function.BiConsumer;
 
 
 public class StoneGameBoard implements TwoPhaseMoveState<Position> {
@@ -23,6 +24,19 @@ public class StoneGameBoard implements TwoPhaseMoveState<Position> {
         }
         player = State.Player.PLAYER_1;
 
+    }
+    public BooleanProperty getCellProperty(int row, int col) {
+        return board[row][col];
+    }
+
+    public void observeBoard(BiConsumer<Integer, Integer> observer) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                final int row = i;
+                final int col = j;
+                board[i][j].addListener((observable, oldValue, newValue) -> observer.accept(row, col));
+            }
+        }
     }
 
     @Override
