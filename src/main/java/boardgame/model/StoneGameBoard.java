@@ -65,7 +65,7 @@ public class StoneGameBoard implements TwoPhaseMoveState<Position> {
         return 0 <= row && row < BOARD_SIZE && 0 <= col && col < BOARD_SIZE;
     }
 
-    private boolean isEmpty(Position p) {
+    public boolean isEmpty(Position p) {
         return !board[p.row()][p.col()].get();
     }
 
