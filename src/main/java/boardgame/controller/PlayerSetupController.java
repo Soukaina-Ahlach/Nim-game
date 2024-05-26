@@ -14,6 +14,9 @@ import javafx.fxml.FXMLLoader;
 import org.tinylog.Logger;
 import java.io.IOException;
 
+/**
+ * Controller class responsible for handling player setup interactions.
+ */
 public class PlayerSetupController {
     @FXML
     private TextField player1Field;
@@ -48,6 +51,7 @@ public class PlayerSetupController {
         Platform.exit();
     }
 
+    // Private method for showing alert
     private void showAlert(String title, String message) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

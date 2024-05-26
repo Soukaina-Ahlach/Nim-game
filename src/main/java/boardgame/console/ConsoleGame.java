@@ -8,15 +8,26 @@ import boardgame.model.StoneGameBoard;
 import java.util.Scanner;
 import java.util.function.Function;
 
+/**
+ * Represents a console-based game implementation that extends {@link TwoPhaseMoveGame} for two-phase move games.
+ * Allows players to interact with the game via the console.
+ */
 public class ConsoleGame extends TwoPhaseMoveGame<Position> {
     private final StoneGameBoard model = new StoneGameBoard();
     private Position fromPosition;
     private final Scanner scanner;
 
+    /**
+     * Constructs a new ConsoleGame instance with the provided initial game state and move parser.
+     *
+     * @param state  The initial game state.
+     * @param parser A function to parse user input into a {@link Position}.
+     */
     public ConsoleGame(TwoPhaseMoveState<Position> state, Function<String, Position> parser) {
         super(state, parser);
         this.scanner = new Scanner(System.in);
     }
+
 
     @Override
     protected void makeMoveIfPossible(Position move) {
@@ -49,22 +60,31 @@ public class ConsoleGame extends TwoPhaseMoveGame<Position> {
         }
     }
 
+
     private void resetFromPosition() {
         fromPosition = null;
     }
+
 
     @Override
     protected void printPrompt() {
         Logger.info(fromPosition == null ? "Player {}, enter your move from position :" : "Player {}, enter your move to position :", model.getNextPlayer());
     }
+
+
     protected void printPromptForToPosition() {
         Logger.info("Player {}, enter your move to position :", model.getNextPlayer());
     }
+
+
     @Override
     protected void printState() {
         Logger.info(model.toString());
     }
 
+    /**
+     * Starts the console-based game, allowing players to make moves until the game is over.
+     */
     @Override
     public void start() {
         printState();
@@ -82,6 +102,12 @@ public class ConsoleGame extends TwoPhaseMoveGame<Position> {
         scanner.close();
     }
 
+    /**
+     * Parses user input into a {@link Position}.
+     *
+     * @param input The user input representing a position.
+     * @return The parsed position, or null if parsing fails.
+     */
     public static Position parseMove(String input) {
         input = input.trim();
         String pattern = "\\d{1,2}\\s+\\d{1,2}";
@@ -94,6 +120,7 @@ public class ConsoleGame extends TwoPhaseMoveGame<Position> {
         int col = Integer.parseInt(parts[1]);
         return new Position(row, col);
     }
+
 
     public static void main(String[] args) {
         TwoPhaseMoveState<Position> initialState = new StoneGameBoard();

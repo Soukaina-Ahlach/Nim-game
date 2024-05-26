@@ -23,6 +23,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller class for the board game application.
+ * Handles user interactions and updates the game state accordingly.
+ */
 public class BoardGameController {
     @FXML
     private GridPane board;
@@ -49,6 +53,12 @@ public class BoardGameController {
         updateCurrentTurn();
     }
 
+    /**
+     * Sets the names of the players.
+     *
+     * @param player1 Name of player 1.
+     * @param player2 Name of player 2.
+     */
     public void setPlayerNames(String player1, String player2) {
         this.player1Name = player1;
         this.player2Name = player2;
@@ -72,6 +82,7 @@ public class BoardGameController {
         return square;
     }
 
+    // Handles the click event on a square in the game board.
     private void handleSquareClick(int row, int col) {
         Position clickedPosition = new Position(row, col);
 
@@ -124,6 +135,9 @@ public class BoardGameController {
         });
     }
 
+    /**
+     * Constructs a new BoardGameController instance and loads existing game results from JSON.
+     */
     public BoardGameController() {
         loadGameResultsFromJson();
     }
@@ -146,7 +160,6 @@ public class BoardGameController {
 
         showAlert("Game Over", "Player " + winnerName + " wins!");
 
-        // Serialize game results into JSON and store in a file
         saveGameResultsToJson();
     }
 
@@ -159,12 +172,5 @@ public class BoardGameController {
         }
     }
 
-    public void switchSceneToMenu(ActionEvent actionEvent) {
-    }
 
-    @FXML
-    private void handleExit() {
-        Logger.info("Exiting...");
-        Platform.exit();
-    }
 }
