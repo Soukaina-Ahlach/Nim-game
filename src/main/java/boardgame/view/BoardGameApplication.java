@@ -75,7 +75,12 @@ public class BoardGameApplication extends Application {
         player2Name = player2;
     }
 
-
+    /**
+     * Entry point for the JavaFX application.
+     * Initializes and starts the JavaFX runtime.
+     *
+     * @param args Command-line arguments (not used in JavaFX applications)
+     */
     public static void main(String[] args) {
         launch(args);
     }
