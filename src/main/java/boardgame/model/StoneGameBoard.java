@@ -15,7 +15,16 @@ import java.time.LocalDateTime;
  */
 
 public class StoneGameBoard implements TwoPhaseMoveState<Position> {
+    /**
+     * The size of the game board.
+     */
     public static final int BOARD_SIZE = 4;
+
+    /**
+     * Represents the game board.
+     * The board is represented as a two-dimensional array of BooleanProperty objects.
+     * Each element in the array represents a cell on the game board.
+     */
     public final BooleanProperty[][] board;
 
     private State.Player player;
