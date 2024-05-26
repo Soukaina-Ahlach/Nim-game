@@ -188,3 +188,5 @@ nbdist/
 
 .gitkeep
 error.log
+game_results.json
+homework-template-project.iml
